@@ -47,6 +47,18 @@ li.list-group-item-cust {
 }
 /* FORM */
 
+/* DROPDOWN MENU */
+.dropdown-menu a{
+  font-size: 15px;
+  color: #000 !important;
+  padding: 0;
+}
+
+.dropdown-item {
+  transition: 0.4s;
+}
+/* DROPDOWN MENU */
+
 /* 404 NOT FOUND PAGE */
 .not-found {
   background-color: #e9ecef;
@@ -68,3 +80,4 @@ li.list-group-item-cust {
   }
 }
 /* RESPONSIVE BUTTON */
+

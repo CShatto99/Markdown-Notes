@@ -2,18 +2,21 @@ import React from 'react'
 import { Redirect} from 'react-router-dom'
 import {
   Jumbotron,
-  Button
+  Button,
+  Alert
 } from 'reactstrap'
 import { useSelector } from 'react-redux'
 
 const Hero = () => {
   const { isAuthenticated } = useSelector(state => state.auth)
+  const { msg } = useSelector(state => state.alert)
 
   if(isAuthenticated)
     return <Redirect to='/home' />
 
   return (
     <Jumbotron className='text-center'>
+    {msg && <Alert color='danger'>{msg}</Alert>}
       <h1>Welcome to Markdown Notes</h1>
       <p className='lead'>
         This is a simple web app that allows you to keep track of a list of{' '}

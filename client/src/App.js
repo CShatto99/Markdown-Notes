@@ -10,6 +10,7 @@ import NoteList from './components/note/NoteList'
 import Register from './components/auth/Register'
 import Login from './components/auth/Login'
 import Account from './components/account/Account'
+import Explore from './components/layout/Explore'
 import NotFound from './components/NotFound'
 import store from './store'
 import { Provider } from 'react-redux'
@@ -17,7 +18,7 @@ import { loadUser } from './store/auth'
 
 const App = () => {
   useEffect(() => {
-    if(store.getState().auth.isAuthenticated)
+    if(localStorage.getItem('isAuth') === 'true')
       store.dispatch(loadUser())
   })
 
@@ -33,6 +34,7 @@ const App = () => {
               <Route exact path='/register' component={Register} />
               <Route exact path='/login' component={Login} />
               <PrivateRoute exact path='/account/:_id' component={Account} />
+              <PrivateRoute exact path='/explore' component={Explore} />
               <Route component={NotFound} />
             </Switch>
           </Container>

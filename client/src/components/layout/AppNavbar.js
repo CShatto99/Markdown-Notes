@@ -9,6 +9,10 @@ import {
   NavItem,
   NavLink,
   Collapse,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
   Container
 } from 'reactstrap'
 import { logout } from '../../store/auth'
@@ -23,18 +27,31 @@ const AppNavbar = () => {
   const userLinks = (
     <Fragment>
       <NavItem>
-        <Link
-          className='nav-link'
-          to='/home'
-        >Home
-        </Link>
+        <Link className='nav-link' to='/explore'>Explore</Link>
       </NavItem>
       <NavItem>
-        {user && (<Link className='nav-link' to={`/account/${user._id}`}>Account</Link>)}
+        <Link className='nav-link' to='/home'>Home</Link>
       </NavItem>
       <NavItem>
-        <NavLink onClick={() => dispatch(logout())} style={{cursor: 'pointer'}}>Logout</NavLink>
+        
       </NavItem>
+      <NavItem>
+        
+      </NavItem>
+      <UncontrolledDropdown nav inNavbar>
+        <DropdownToggle nav caret>
+          Profile
+        </DropdownToggle>
+        <DropdownMenu right>
+          <DropdownItem>
+            {user && (<Link className='nav-link' to={`/account/${user._id}`}>Account</Link>)}
+          </DropdownItem>
+          <DropdownItem divider />
+          <DropdownItem>
+            <NavLink onClick={() => dispatch(logout())} style={{cursor: 'pointer'}}>Logout</NavLink>
+          </DropdownItem>
+        </DropdownMenu>
+      </UncontrolledDropdown>
     </Fragment>
   )
 

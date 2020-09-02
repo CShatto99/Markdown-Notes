@@ -12,7 +12,7 @@ async function auth(req, res, next) {
     next()
   } catch(err) {
     console.error(err)
-    res.status(401).json({ msg: 'Invalid token, try again' })
+    res.status(401).json({ msg: 'Session expired' })
   }
 }
 

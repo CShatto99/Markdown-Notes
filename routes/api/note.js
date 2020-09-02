@@ -8,9 +8,24 @@ const Note = require('../../models/Note')
 router.use(auth)
 
 // @route GET /api/note
-// @desc Get user notes
+// @desc Get all user notes
 // @access Private
 router.get('/', async (req, res) => {
+  try {
+    const users = await User.find().select('name notes')
+
+    res.json(users)
+
+  } catch(err) {
+    console.error(err.message)
+    res.status(500).send('Server error')
+  }
+})
+
+// @route GET /api/note/user
+// @desc Get user notes
+// @access Private
+router.get('/user', async (req, res) => {
   try {
     const user = await User.findById({ _id: req.user._id })
 

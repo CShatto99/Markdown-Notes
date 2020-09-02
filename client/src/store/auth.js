@@ -15,15 +15,15 @@ const auth = createSlice({
   reducers: {
     login_user: (state, action) => {
       localStorage.setItem('token', action.payload.accessToken)
+      localStorage.setItem('isAuth', 'true')
       return {
         ...state,
-        ...action.payload,
+        token: localStorage.getItem('token'),
         isAuthenticated: true,
         loading: false
       }
     },
     load_user: (state, action) => {
-      localStorage.setItem('token', action.payload.acessToken)
       return {
         ...state,
         user: action.payload,
@@ -33,6 +33,7 @@ const auth = createSlice({
     },
     clear_user: (state, action) => {
       localStorage.removeItem('token')
+      localStorage.removeItem('isAuth')
       return {
         ...state,
         token: null,
@@ -56,12 +57,11 @@ export const register = user => async dispatch => {
       }
     }
 
-    const res = await axios.post('/api/user', user, config)
+    const res = await axios.post('/api/user/register', user, config)
 
     dispatch(login_user(res.data))
     dispatch(loadUser())
   } catch(err) {
-    console.error(err.message)
     dispatch(setAlert(err.response.data.msg, err.response.status))
   }
 }
@@ -74,7 +74,7 @@ export const login = user => async dispatch => {
   }
 
   try {
-    const res = await axios.post('/api/auth', user, config)
+    const res = await axios.post('/api/user', user, config)
 
     dispatch(login_user(res.data))
     dispatch(loadUser())
@@ -92,6 +92,7 @@ export const loadUser = () => async dispatch => {
 
     dispatch(load_user(res.data))
   } catch(err) {
+    dispatch(logout())
     dispatch(setAlert(err.response.data.msg, err.response.status))
   }
 }
@@ -102,6 +103,7 @@ export const deleteUser = () => async dispatch => {
 
     await axios.delete('/api/auth')
   } catch(err) {
+    dispatch(logout())
     dispatch(setAlert(err.response.data.msg, err.response.status))
   }
 }
@@ -117,17 +119,12 @@ export const editAccount = formData => async dispatch => {
     const res = await axios.put('/api/auth', formData, config)
     dispatch(load_user(res.data))
   } catch(err) {
+    dispatch(logout())
     dispatch(setAlert(err.response.data.msg, err.response.status))
   }
 }
 
 export const logout = () => async dispatch => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  }
-
   try {
     dispatch(clear_user())
     dispatch(clearNotes())

@@ -1,15 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { setAlert } from './alert'
-import { loadUser } from './auth'
+import { logout } from './auth'
 
 const note = createSlice({
   name: 'note',
   initialState: {
+    allNotes: [],
     notes: [],
     loading: true
   },
   reducers: {
+    get_all_notes: (state, action) => {
+      return {
+        ...state,
+        allNotes: action.payload,
+        loading: false
+      }
+    },
     get_notes: (state, action) => {
       return {
         ...state,
@@ -43,17 +51,24 @@ const note = createSlice({
 
 export default note.reducer
 
-const { get_notes, create_note, update_notes, clear_notes } = note.actions
+const { get_all_notes, get_notes, create_note, update_notes, clear_notes } = note.actions
+
+export const getAllNotes = () => async dispatch => {
+  try {
+    const res = await axios.get('/api/note')
+    dispatch(get_all_notes(res.data))
+  } catch(err) {
+    dispatch(logout())
+    dispatch(setAlert(err.response.data.msg, err.response.status))
+  }
+}
 
 export const getNotes = () => async dispatch => {
   try {
-    const res = await axios.get('/api/note')
+    const res = await axios.get('/api/note/user')
     dispatch(get_notes(res.data))
   } catch(err) {
-    if(err.response.status === 401) {
-      const res = await axios.post('/api/auth/token', { refreshToken: localStorage.refreshToken})
-      dispatch(loadUser(res.data.accessToken))
-    }
+    dispatch(logout())
     dispatch(setAlert(err.response.data.msg, err.response.status))
   }
 }
@@ -69,10 +84,7 @@ export const createNote = note => async dispatch => {
     const res = await axios.post('/api/note', note, config)
     dispatch(create_note(res.data))
   } catch(err) {
-    if(err.response.status === 401) {
-      const res = await axios.post('/api/auth/token', { refreshToken: localStorage.refreshToken})
-      dispatch(loadUser(res.data.accessToken))
-    }
+    dispatch(logout())
     dispatch(setAlert(err.response.data.msg, err.response.status))
   }
 }
@@ -89,10 +101,7 @@ export const deleteNote = _id => async dispatch => {
 
     dispatch(update_notes(res.data))
   } catch(err) {
-    if(err.response.status === 401) {
-      const res = await axios.post('/api/auth/token', { refreshToken: localStorage.refreshToken})
-      dispatch(loadUser(res.data.accessToken))
-    }
+    dispatch(logout())
     dispatch(setAlert(err.response.data.msg, err.response.status))
   }
 }
@@ -109,10 +118,7 @@ export const editNote = ({ _id, note }) => async dispatch => {
 
     dispatch(update_notes(res.data))
   } catch(err) {
-    if(err.response.status === 401) {
-      const res = await axios.post('/api/auth/token', { refreshToken: localStorage.refreshToken})
-      dispatch(loadUser(res.data.accessToken))
-    }
+    dispatch(logout())
     dispatch(setAlert(err.response.data.msg, err.response.status))
   }
 }
