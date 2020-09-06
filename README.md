@@ -33,7 +33,8 @@ Markdown Notes is a simple web app that allows a user to keep track of a list of
 * nodemon
 
 ## Local Setup
-1. Run the following commands 
+1. Add a Mongo URI and a JWT token secret to the `.env` file.
+2. Run the following commands:
     ```
     git clone https://github.com/CShatto99/Markdown-Notes.git
     
@@ -41,17 +42,17 @@ Markdown Notes is a simple web app that allows a user to keep track of a list of
     
     npm run installDep
     ```
-2. Servers
-    ```
-    Option 1 (for running both the servers simultaneously):
+3. Servers:
+   ```
+    Option 1 (runs backend and frontend servers):
     
     npm run dev
     
     Option 2 (for running both the servers individually):
     
-    npm run server
+    npm run server (runs backend server only)
     
-    npm run client
+    npm run client (runs frontend server only)
     ```
     
 ## API Endpoints
