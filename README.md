@@ -54,8 +54,6 @@ Markdown Notes is a simple web app that allows a user to keep track of a list of
     
     npm run client (runs frontend server only)
     ```
-    
-## API Endpoints
 
 ## DEMO
 
