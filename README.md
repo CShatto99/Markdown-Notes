@@ -12,7 +12,7 @@ Markdown Notes is a simple web app that allows a user to keep track of a list of
 
 ## Tech Stack
 
-#### Front-end
+#### Front End
 * React
 * react-router-dom
 * react-transition-group
@@ -22,7 +22,7 @@ Markdown Notes is a simple web app that allows a user to keep track of a list of
 * marked
 * axios
 
-#### Back-end
+#### Back End
 * Node
 * express
 * jsonwebtoken
