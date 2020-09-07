@@ -12,12 +12,11 @@ router.use(auth)
 // @access Private
 router.get('/', async (req, res) => {
   try {
-    const users = await User.find().select('name notes')
+    const users = await User.find().select('name notes date').sort({ date: -1 })
 
     res.json(users)
 
   } catch(err) {
-    console.error(err.message)
     res.status(500).send('Server error')
   }
 })
@@ -33,7 +32,7 @@ router.get('/user', async (req, res) => {
 
   } catch(err) {
     console.error(err.message)
-    res.status(500).send('Server error')
+    res.status(500).json({ msg: "Server error, try again later" });
   }
 })
 
@@ -55,7 +54,7 @@ router.post('/', async (req, res) => {
 
   } catch(err) {
     console.error(err.message)
-    res.status(500).send('Server error')
+    res.status(500).json({ msg: "Server error, try again later" });
   }
 })
 
@@ -74,7 +73,7 @@ router.delete('/:_id', async (req, res) => {
 
   } catch(err) {
     console.error(err.message)
-    res.status(500).send('Server error')
+    res.status(500).json({ msg: "Server error, try again later" });
   }
 })
 
@@ -99,7 +98,7 @@ router.put('/:_id', async (req, res) => {
 
   } catch(err) {
     console.error(err.message)
-    res.status(500).send('Server error')
+    res.status(500).json({ msg: "Server error, try again later" });
   }
 })
 

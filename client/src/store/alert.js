@@ -4,21 +4,21 @@ const alert = createSlice({
   name: 'alert',
   initialState: {
     msg: '',
-    type: null
+    status: null
   },
   reducers: {
     set_alert: (state, action) => {
       return {
         ...state,
         msg: action.payload.msg,
-        type: action.payload.type
+        status: action.payload.status
       }
     },
     clear_alert: (state, action) => {
       return {
         ...state,
         msg: '',
-        type: null
+        status: null
       }
     }
   }
@@ -28,8 +28,9 @@ export default alert.reducer
 
 const { set_alert, clear_alert } = alert.actions
 
-export const setAlert = (msg, type) => dispatch => {
-  dispatch(set_alert({ msg, type }))
+export const setAlert = (msg, status) => dispatch => {
+  dispatch(set_alert({ msg, status }))
+  setTimeout(() => dispatch(clearAlert()), 7000)
 }
 
 export const clearAlert = () => dispatch => {

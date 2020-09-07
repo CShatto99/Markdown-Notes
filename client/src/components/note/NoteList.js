@@ -14,13 +14,12 @@ import {
 import AddNote from './AddNote'
 import EditNote from './EditNote'
 import { getNotes, deleteNote } from '../../store/note'
-import { clearAlert } from '../../store/alert'
 
 const NoteList = () => {
   const dispatch = useDispatch()
   const { isAuthenticated, } = useSelector(state => state.auth)
   const { notes, loading } = useSelector(state => state.note)
-  const { msg, type } = useSelector(state => state.alert)
+  const { msg, status } = useSelector(state => state.alert)
   const [inProp, setInProp] = useState(false)
 
   useEffect(() => {
@@ -38,9 +37,6 @@ const NoteList = () => {
     setInProp(!inProp)
   }
 
-  if(type === 401)
-    setTimeout(() => dispatch(clearAlert()), 5000)
-
   if(!isAuthenticated)
     return <Redirect to='/' />
 
@@ -51,7 +47,7 @@ const NoteList = () => {
           <Spinner size='lg' color='light'/>
         </div> :
         <Fragment>
-          {type === 401 && (<Alert color='danger'>{msg}</Alert>)}
+          {status === 401 && (<Alert color='danger'>{msg}</Alert>)}
           <ListGroup className='mb-2 text-center' >
             <ListGroupItem className='list-group-item-cust'>
               <h2>Your Markdown Notes</h2>

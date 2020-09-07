@@ -10,13 +10,12 @@ import {
   Alert
 } from 'reactstrap'
 import { getAllNotes } from '../../store/note'
-import { clearAlert } from '../../store/alert'
 
 const Explore = () => {
   const dispatch = useDispatch()
   const { isAuthenticated, } = useSelector(state => state.auth)
   const { allNotes, loading } = useSelector(state => state.note)
-  const { msg, type } = useSelector(state => state.alert)
+  const { msg, status } = useSelector(state => state.alert)
 
   useEffect(() => {
     if(isAuthenticated) dispatch(getAllNotes())
@@ -26,9 +25,6 @@ const Explore = () => {
     let rawMarkup = marked(note)
     return { __html: rawMarkup }
   }
-
-  if(type === 401)
-    setTimeout(() => dispatch(clearAlert()), 5000)
 
   if(!isAuthenticated)
     return <Redirect to='/' />
@@ -40,7 +36,7 @@ const Explore = () => {
           <Spinner size='lg' color='light'/>
         </div> :
         <Fragment>
-          {type === 401 && (<Alert color='danger'>{msg}</Alert>)}
+          {status === 401 && (<Alert color='danger'>{msg}</Alert>)}
           <ListGroup className='mb-2 text-center' >
             <ListGroupItem className='list-group-item-cust'>
               <h2>Public Markdown Notes</h2>

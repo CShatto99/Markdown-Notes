@@ -14,12 +14,11 @@ import Explore from './components/layout/Explore'
 import NotFound from './components/NotFound'
 import store from './store'
 import { Provider } from 'react-redux'
-import { loadUser } from './store/auth'
+import { refreshUser } from './store/auth'
 
 const App = () => {
   useEffect(() => {
-    if(localStorage.getItem('isAuth') === 'true')
-      store.dispatch(loadUser())
+    store.dispatch(refreshUser())
   })
 
   return (

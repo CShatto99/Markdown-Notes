@@ -5,6 +5,7 @@ const router = express.Router()
 const auth = require('../../middleware/auth')
 
 const User = require('../../models/User')
+const genAccessToken = require('../../utils/genAccessToken')
 
 // @route GET /api/auth
 // @desc  Load a user
@@ -14,7 +15,6 @@ router.get('/', auth, async (req, res) => {
     const user = await User.findById({ _id: req.user._id }).select('-password -notes')
     res.json(user)
   } catch(err) {
-    console.error(err.message)
     res.status(500).send('Server error')
   }
 })
@@ -29,7 +29,7 @@ router.delete('/', auth, async (req, res) => {
     res.status(204)
   } catch(err) {
     console.error(err.message)
-    res.status(500).send('Server error')
+    res.status(500).json({ msg: "Server error, try again later" });
   }
 })
 
@@ -57,8 +57,41 @@ router.put('/', auth, async (req, res) => {
     res.json(updatedUser)
   } catch(err) {
     console.error(err.message)
-    res.status(500).send('Server error')
+    res.status(500).json({ msg: "Server error, try again later" });
   }
+})
+
+// @route GET /api/auth/token
+// @desc  Refresh a user
+// @access Public
+router.get('/token', (req, res) => {
+  try {
+    const token = req.cookies.token 
+
+    if(!token)
+      return res.json({ accessToken: "" })
+
+    const decoded = jwt.verify(token, process.env.REFRESH_SECRET_TOKEN)
+
+    const accessToken = genAccessToken({ _id: decoded._id})
+
+    res.json({ accessToken })
+
+  } catch(err) {
+    res.status(401).json({ msg: 'Invalid token' })
+  }
+})
+
+// @route DELETE /api/auth/logout
+// @desc  Refresh a user
+// @access Public
+router.delete('/logout', (req, res) => {
+  if(req.cookies.token) {
+    res.clearCookie('token')
+    return res.json({ msg: 'Logout successful' })
+  }
+  
+  res.status(204).send()
 })
 
 module.exports = router

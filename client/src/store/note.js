@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { setAlert } from './alert'
-import { logout } from './auth'
+import { refreshUser } from './auth'
 
 const note = createSlice({
   name: 'note',
@@ -58,8 +58,8 @@ export const getAllNotes = () => async dispatch => {
     const res = await axios.get('/api/note')
     dispatch(get_all_notes(res.data))
   } catch(err) {
-    dispatch(logout())
     dispatch(setAlert(err.response.data.msg, err.response.status))
+    if(err.response.status === 401) dispatch(refreshUser())
   }
 }
 
@@ -68,8 +68,8 @@ export const getNotes = () => async dispatch => {
     const res = await axios.get('/api/note/user')
     dispatch(get_notes(res.data))
   } catch(err) {
-    dispatch(logout())
     dispatch(setAlert(err.response.data.msg, err.response.status))
+    if(err.response.status === 401) dispatch(refreshUser())
   }
 }
 
@@ -84,8 +84,8 @@ export const createNote = note => async dispatch => {
     const res = await axios.post('/api/note', note, config)
     dispatch(create_note(res.data))
   } catch(err) {
-    dispatch(logout())
     dispatch(setAlert(err.response.data.msg, err.response.status))
+    if(err.response.status === 401) dispatch(refreshUser())
   }
 }
 
@@ -101,8 +101,8 @@ export const deleteNote = _id => async dispatch => {
 
     dispatch(update_notes(res.data))
   } catch(err) {
-    dispatch(logout())
     dispatch(setAlert(err.response.data.msg, err.response.status))
+    if(err.response.status === 401) dispatch(refreshUser())
   }
 }
 
@@ -118,8 +118,8 @@ export const editNote = ({ _id, note }) => async dispatch => {
 
     dispatch(update_notes(res.data))
   } catch(err) {
-    dispatch(logout())
     dispatch(setAlert(err.response.data.msg, err.response.status))
+    if(err.response.status === 401) dispatch(refreshUser())
   }
 }
 

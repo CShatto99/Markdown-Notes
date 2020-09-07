@@ -1,83 +1,90 @@
-const express = require('express')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const router = express.Router()
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const router = express.Router();
+const genAccessToken = require("../../utils/genAccessToken");
+const genRefreshToken = require("../../utils/genRefreshToken");
 
-const User = require('../../models/User')
+const User = require("../../models/User");
 
 // @route POST /api/user/register
 // @desc Register a user
 // @access Public
-router.post('/register', async (req, res) => {
-  const { name, email, password } = req.body
+router.post("/register", async (req, res) => {
+  const { name, email, password } = req.body;
 
-  if(!name || !email || !password)
-    return res.status(400).json({ msg: 'Please enter all required fields' })
+  if (!name || !email || !password)
+    return res.status(400).json({ msg: "Please enter all required fields" });
 
-  if(password.length < 6)
-    return res.status(400).json({ msg: 'Password must be at least 6 characters long' })
+  if (password.length < 6)
+    return res
+      .status(400)
+      .json({ msg: "Password must be at least 6 characters long" });
 
-  const existingUser = await User.findOne({ email })
+  const existingUser = await User.findOne({ email });
 
-  if(existingUser)
-    return res.status(400).json({ msg: 'User already exists' })
+  if (existingUser) return res.status(400).json({ msg: "User already exists" });
 
   try {
     const newUser = new User({
       name,
       email,
-      password
-    })
+      password,
+    });
 
-    const salt = await bcrypt.genSalt(10)
-    newUser.password = await bcrypt.hash(password, salt)
+    const salt = await bcrypt.genSalt(10);
+    newUser.password = await bcrypt.hash(password, salt);
 
-    const user = await newUser.save()
+    const user = await newUser.save();
 
-    const accessToken =jwt.sign({ _id: user._id }, process.env.ACCESS_SECRET_TOKEN, { expiresIn: 1800 })
+    const accessToken = genAccessToken({ _id: user._id });
+    const refreshToken = genRefreshToken({ _id: user._id });
+
+    res.cookie("token", refreshToken, {
+      httpOnly: true,
+      expires: new Date(Date.now() + 7 * 86400000),
+    });
 
     res.json({
       accessToken,
-      user: { name, email }
-    })
-
-  } catch(err) {
+    });
+  } catch (err) {
     console.error(err.message)
-    res.status(500).send('Server error')
+    res.status(500).json({ msg: "Server error, try again later" });
   }
-})
+});
 
 // @route POST /api/user
 // @desc  Login a user
 // @access Public
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    const { email, password } = req.body
+    const { email, password } = req.body;
 
-    if(!email || !password)
-      return res.status(400).json({ msg: 'Please enter all required fields' })
+    if (!email || !password)
+      return res.status(400).json({ msg: "Please enter all required fields" });
 
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email });
 
-    if(!user)
-      return res.status(400).json({ msg: 'Invalid credentials' })
+    if (!user) return res.status(400).json({ msg: "Invalid credentials" });
 
-    const match = await bcrypt.compare(password, user.password)
+    const match = await bcrypt.compare(password, user.password);
 
-    if(!match)
-      return res.status(400).json({ msg: 'Invalid credentials' })
+    if (!match) return res.status(400).json({ msg: "Invalid credentials" });
 
-    const accessToken =jwt.sign({ _id: user._id }, process.env.ACCESS_SECRET_TOKEN, { expiresIn: 1800 })
+    const accessToken = genAccessToken({ _id: user._id });
+    const refreshToken = genRefreshToken({ _id: user._id });
+
+    res.cookie("token", refreshToken, { httpOnly: true });
 
     res.json({
       accessToken,
-      user: { name: user.name, email }
-    })
-
-  } catch(err) {
+      user: { name: user.name, email },
+    });
+  } catch (err) {
     console.error(err.message)
-    res.status(500).send('Server error')
+    res.status(500).json({ msg: "Server error, try again later" });
   }
-})
+});
 
-module.exports = router
+module.exports = router;
