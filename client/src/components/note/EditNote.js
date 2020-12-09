@@ -1,5 +1,5 @@
-import React, { Fragment, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { Fragment, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   Modal,
@@ -9,51 +9,49 @@ import {
   FormGroup,
   Label,
   Input,
-  Alert
-} from 'reactstrap'
-import { editNote } from '../../store/note'
-import { clearAlert } from '../../store/alert'
+  Alert,
+} from "reactstrap";
+import { editNote } from "../../store/note";
+import { clearAlert } from "../../store/alert";
 
 const EditNote = ({ _id, note }) => {
-  const dispatch = useDispatch()
-  const { msg } = useSelector(state => state.alert)
+  const dispatch = useDispatch();
+  const { msg } = useSelector(state => state.alert);
   const [state, setState] = useState({
     isOpen: false,
-    note: note
-  })
+    note: note,
+  });
 
   const toggle = () => {
     setState({
       ...state,
-      isOpen: !state.isOpen
-    })
+      isOpen: !state.isOpen,
+    });
 
-    if(msg)
-      dispatch(clearAlert())
-  }
+    if (msg) dispatch(clearAlert());
+  };
 
   const onChange = e => {
     setState({
       ...state,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const onSubmit = e => {
-    e.preventDefault()
+    e.preventDefault();
 
-    dispatch(editNote({ _id, note: state.note }))
+    dispatch(editNote({ _id, note: state.note }));
 
-    if(state.isOpen && state.note)
-      toggle()
-  }
+    if (state.isOpen && state.note) toggle();
+  };
 
   return (
     <Fragment>
       <Button
-        className='float-right ml-1'
-        size='sm'
-        color='primary'
+        className="float-right ml-1"
+        size="sm"
+        color="primary"
         onClick={toggle}
       >
         <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
@@ -62,26 +60,30 @@ const EditNote = ({ _id, note }) => {
         <ModalHeader toggle={toggle}>Edit Note</ModalHeader>
         <ModalBody>
           <Form onSubmit={e => onSubmit(e)}>
-            {msg && <Alert color='danger'>{msg}</Alert>}
+            {msg && <Alert color="danger">{msg}</Alert>}
             <FormGroup>
-              <Label for='note'>Note</Label>
+              <Label for="note">Note</Label>
               <Input
-                type='textarea'
-                id='note'
-                name='note'
-                placeholder='Edit note'
+                type="textarea"
+                id="note"
+                name="note"
+                placeholder="Edit note"
                 value={state.note}
                 onChange={e => onChange(e)}
               />
             </FormGroup>
-            <hr/>
-            <Button color='primary' block>Save Changes</Button>
-            <Button onClick={toggle} color='light' block>Cancel</Button>
+            <hr />
+            <Button color="primary" block>
+              Save Changes
+            </Button>
+            <Button onClick={toggle} color="light" block>
+              Cancel
+            </Button>
           </Form>
         </ModalBody>
       </Modal>
     </Fragment>
-  )
-}
+  );
+};
 
-export default EditNote
+export default EditNote;

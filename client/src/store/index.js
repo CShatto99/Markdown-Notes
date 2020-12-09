@@ -1,15 +1,15 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { combineReducers } from 'redux'
-import auth from './auth'
-import note from './note'
-import alert from './alert'
+import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers } from "redux";
+import auth from "./auth";
+import note from "./note";
+import alert from "./alert";
 
 const reducer = combineReducers({
   auth,
   note,
-  alert
-})
+  alert,
+});
 
-const store = configureStore({ reducer })
+const store = configureStore({ reducer });
 
-export default store
+export default store;

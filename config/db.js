@@ -1,5 +1,5 @@
-require('dotenv').config()
-const mongoose = require('mongoose')
+require("dotenv").config();
+const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
@@ -7,15 +7,14 @@ const connectDB = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
-      useFindAndModify: false
-    })
+      useFindAndModify: false,
+    });
 
-    console.log('MongoDB Connected')
-  } catch(err) {
-    console.error(err.message)
-    res.status(500).send('Server error')
+    console.log("MongoDB Connected");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
   }
-}
+};
 
-
-module.exports = connectDB
+module.exports = connectDB;

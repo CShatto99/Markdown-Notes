@@ -1,44 +1,39 @@
-import React from 'react'
-import { Redirect} from 'react-router-dom'
-import {
-  Jumbotron,
-  Button,
-  Alert
-} from 'reactstrap'
-import { useSelector } from 'react-redux'
+import React from "react";
+import { Redirect } from "react-router-dom";
+import { Jumbotron, Button, Alert } from "reactstrap";
+import { useSelector } from "react-redux";
 
 const Hero = () => {
-  const { isAuthenticated } = useSelector(state => state.auth)
-  const { msg } = useSelector(state => state.alert)
+  const { isAuthenticated } = useSelector(state => state.auth);
+  const { msg } = useSelector(state => state.alert);
 
-  if(isAuthenticated)
-    return <Redirect to='/home' />
+  if (isAuthenticated) return <Redirect to="/home" />;
 
   return (
-    <Jumbotron className='text-center'>
-    {msg && <Alert color='danger'>{msg}</Alert>}
+    <Jumbotron className="text-center">
+      {msg && <Alert color="danger">{msg}</Alert>}
       <h1>Welcome to Markdown Notes</h1>
-      <p className='lead'>
-        This is a simple web app that allows you to keep track of a list of{' '}
+      <p className="lead">
+        This is a simple web app that allows you to keep track of a list of{" "}
         <a
-          className='std-link'
-          target='_blank'
-          rel='noopener noreferrer'
-          href='https://en.wikipedia.org/wiki/Markdown#:~:text=Markdown%20is%20a%20lightweight%20markup,using%20a%20plain%20text%20editor.'
+          className="std-link"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://en.wikipedia.org/wiki/Markdown#:~:text=Markdown%20is%20a%20lightweight%20markup,using%20a%20plain%20text%20editor."
         >
           markdown
-        </a>{' '}
+        </a>{" "}
         notes
       </p>
       <hr />
-      <Button href='/register' className='mr-3 is-mobile' color='primary'>
+      <Button href="/register" className="mr-3 is-mobile" color="primary">
         Register <i className="fa fa-sign-in" aria-hidden="true"></i>
       </Button>
-      <Button href='/login' className='is-mobile' color='light'>
+      <Button href="/login" className="is-mobile" color="light">
         Login <i className="fa fa-sign-in" aria-hidden="true"></i>
       </Button>
     </Jumbotron>
-  )
-}
+  );
+};
 
-export default Hero
+export default Hero;

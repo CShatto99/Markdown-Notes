@@ -7,21 +7,21 @@ import { clearAlert } from "../../store/alert";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => state.auth);
-  const { msg, status } = useSelector((state) => state.alert);
+  const { isAuthenticated } = useSelector(state => state.auth);
+  const { msg, status } = useSelector(state => state.alert);
   const [state, setState] = useState({
     email: "",
     password: "",
   });
 
-  const onChange = (e) => {
+  const onChange = e => {
     setState({
       ...state,
       [e.target.name]: e.target.value,
     });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = e => {
     e.preventDefault();
 
     const { email, password } = state;
@@ -37,7 +37,7 @@ const Login = () => {
         <h2 className="text-center">Login</h2>
       </div>
       <div className="form-section">
-        <Form onSubmit={(e) => onSubmit(e)}>
+        <Form onSubmit={e => onSubmit(e)}>
           {status && status === 200 && <Alert color="success">{msg}</Alert>}
           {status && status !== 200 && <Alert color="danger">{msg}</Alert>}
           <small className="text-danger">* = required</small>
@@ -51,7 +51,7 @@ const Login = () => {
               name="email"
               placeholder="Enter your email"
               value={state.email}
-              onChange={(e) => onChange(e)}
+              onChange={e => onChange(e)}
             />
           </FormGroup>
           <FormGroup>
@@ -64,7 +64,7 @@ const Login = () => {
               name="password"
               placeholder="Enter your password"
               value={state.password}
-              onChange={(e) => onChange(e)}
+              onChange={e => onChange(e)}
             />
           </FormGroup>
           <div className="text-center">

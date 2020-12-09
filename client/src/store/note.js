@@ -1,128 +1,134 @@
-import { createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
-import { setAlert } from './alert'
-import { refreshUser } from './auth'
+import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { setAlert } from "./alert";
+import { refreshUser } from "./auth";
 
 const note = createSlice({
-  name: 'note',
+  name: "note",
   initialState: {
     allNotes: [],
     notes: [],
-    loading: true
+    loading: true,
   },
   reducers: {
     get_all_notes: (state, action) => {
       return {
         ...state,
         allNotes: action.payload,
-        loading: false
-      }
+        loading: false,
+      };
     },
     get_notes: (state, action) => {
       return {
         ...state,
         notes: action.payload,
-        loading: false
-      }
+        loading: false,
+      };
     },
     create_note: (state, action) => {
       return {
         ...state,
         notes: [...state.notes, action.payload],
-        loading: false
-      }
+        loading: false,
+      };
     },
     update_notes: (state, action) => {
       return {
         ...state,
         notes: action.payload,
-        loading: false
-      }
+        loading: false,
+      };
     },
     clear_notes: (state, action) => {
       return {
         ...state,
         notes: [],
-        loading: false
-      }
-    }
-  }
-})
+        loading: false,
+      };
+    },
+  },
+});
 
-export default note.reducer
+export default note.reducer;
 
-const { get_all_notes, get_notes, create_note, update_notes, clear_notes } = note.actions
+const {
+  get_all_notes,
+  get_notes,
+  create_note,
+  update_notes,
+  clear_notes,
+} = note.actions;
 
 export const getAllNotes = () => async dispatch => {
   try {
-    const res = await axios.get('/api/note')
-    dispatch(get_all_notes(res.data))
-  } catch(err) {
-    dispatch(setAlert(err.response.data.msg, err.response.status))
-    if(err.response.status === 401) dispatch(refreshUser())
+    const res = await axios.get("/api/note");
+    dispatch(get_all_notes(res.data));
+  } catch (err) {
+    dispatch(setAlert(err.response.data.msg, err.response.status));
+    if (err.response.status === 401) dispatch(refreshUser());
   }
-}
+};
 
 export const getNotes = () => async dispatch => {
   try {
-    const res = await axios.get('/api/note/user')
-    dispatch(get_notes(res.data))
-  } catch(err) {
-    dispatch(setAlert(err.response.data.msg, err.response.status))
-    if(err.response.status === 401) dispatch(refreshUser())
+    const res = await axios.get("/api/note/user");
+    dispatch(get_notes(res.data));
+  } catch (err) {
+    dispatch(setAlert(err.response.data.msg, err.response.status));
+    if (err.response.status === 401) dispatch(refreshUser());
   }
-}
+};
 
 export const createNote = note => async dispatch => {
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
-  }
+      "Content-Type": "application/json",
+    },
+  };
 
   try {
-    const res = await axios.post('/api/note', note, config)
-    dispatch(create_note(res.data))
-  } catch(err) {
-    dispatch(setAlert(err.response.data.msg, err.response.status))
-    if(err.response.status === 401) dispatch(refreshUser())
+    const res = await axios.post("/api/note", note, config);
+    dispatch(create_note(res.data));
+  } catch (err) {
+    dispatch(setAlert(err.response.data.msg, err.response.status));
+    if (err.response.status === 401) dispatch(refreshUser());
   }
-}
+};
 
 export const deleteNote = _id => async dispatch => {
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
-  }
+      "Content-Type": "application/json",
+    },
+  };
 
   try {
-    const res = await axios.delete(`/api/note/${_id}`, config)
+    const res = await axios.delete(`/api/note/${_id}`, config);
 
-    dispatch(update_notes(res.data))
-  } catch(err) {
-    dispatch(setAlert(err.response.data.msg, err.response.status))
-    if(err.response.status === 401) dispatch(refreshUser())
+    dispatch(update_notes(res.data));
+  } catch (err) {
+    dispatch(setAlert(err.response.data.msg, err.response.status));
+    if (err.response.status === 401) dispatch(refreshUser());
   }
-}
+};
 
 export const editNote = ({ _id, note }) => async dispatch => {
   const config = {
     header: {
-      'Content-Type': 'application/json'
-    }
-  }
+      "Content-Type": "application/json",
+    },
+  };
 
   try {
-    const res = await axios.put(`/api/note/${_id}`, {note}, config)
+    const res = await axios.put(`/api/note/${_id}`, { note }, config);
 
-    dispatch(update_notes(res.data))
-  } catch(err) {
-    dispatch(setAlert(err.response.data.msg, err.response.status))
-    if(err.response.status === 401) dispatch(refreshUser())
+    dispatch(update_notes(res.data));
+  } catch (err) {
+    dispatch(setAlert(err.response.data.msg, err.response.status));
+    if (err.response.status === 401) dispatch(refreshUser());
   }
-}
+};
 
 export const clearNotes = () => dispatch => {
-  dispatch(clear_notes())
-}
+  dispatch(clear_notes());
+};
