@@ -85,7 +85,7 @@ router.get("/token", (req, res) => {
 });
 
 // @route DELETE /api/auth/logout
-// @desc  Refresh a user
+// @desc  Logout a user
 // @access Public
 router.delete("/logout", (req, res) => {
   if (req.cookies.token) {

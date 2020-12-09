@@ -10,7 +10,7 @@ router.use(auth);
 // @route GET /api/note
 // @desc Get all user notes
 // @access Private
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     const users = await User.find()
       .select("name notes date")
@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
 // @route GET /api/note/user
 // @desc Get user notes
 // @access Private
-router.get("/user", async (req, res) => {
+router.get("/user", auth, async (req, res) => {
   try {
     const user = await User.findById({ _id: req.user._id });
 
@@ -40,7 +40,7 @@ router.get("/user", async (req, res) => {
 // @route POST /api/note
 // @desc Create a note
 // @access Private
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   try {
     if (!req.body.note)
       return res.status(400).json({ msg: "Please enter a note" });
@@ -61,7 +61,7 @@ router.post("/", async (req, res) => {
 // @route DELETE /api/note/:_id
 // @desc Delete a note by id
 // @access Private
-router.delete("/:_id", async (req, res) => {
+router.delete("/:_id", auth, async (req, res) => {
   try {
     const user = await User.findById({ _id: req.user._id });
 
@@ -81,7 +81,7 @@ router.delete("/:_id", async (req, res) => {
 // @route PUT /api/note/:_id
 // @desc Edit a note by id
 // @access Private
-router.put("/:_id", async (req, res) => {
+router.put("/:_id", auth, async (req, res) => {
   try {
     if (!req.body.note)
       return res.status(400).json({ msg: "Please enter a note" });
