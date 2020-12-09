@@ -36,7 +36,7 @@ Markdown Notes is a simple web app that allows a user to keep track of a list of
 
 ## Local Setup
 
-1. Run the following commands
+1. Run the following commands in your desired directory
 
    ```
    git clone https://github.com/CShatto99/Markdown-Notes.git
